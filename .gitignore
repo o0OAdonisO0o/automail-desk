@@ -1,0 +1,32 @@
+# 运行时数据与本地凭据，不得提交
+data/
+logs/
+exports/
+config.json
+_demo/
+assets/.chrome-tmp/
+*.db
+*.db-wal
+*.db-shm
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 本地开发脚本（快捷方式调试等），不随仓库分发
+tools/dump_lnk.py
+tools/make_lnk.vbs
+tools/make_shortcut.py
+tools/make_shortcut2.py
+tools/try_variants.py
+tools/try_variants2.py

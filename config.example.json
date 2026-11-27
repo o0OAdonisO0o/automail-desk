@@ -1,0 +1,14 @@
+{
+  "domain": "example.com",
+  "password": "ChangeMe123",
+  "smtp_host": "smtp.qiye.aliyun.com",
+  "smtp_port": 465,
+  "imap_host": "imap.qiye.aliyun.com",
+  "imap_port": 993,
+  "account_prefix": "send",
+  "account_count": 10,
+  "recipient_xlsx": "",
+  "port": 8765,
+  "sender_name": "Leo Li",
+  "company_name": "Your Company"
+}
