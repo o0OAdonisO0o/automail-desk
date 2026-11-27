@@ -17,9 +17,24 @@ fi
 
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
-echo "downloading https://github.com/$REPO/archive/refs/heads/main.tar.gz"
-if ! curl -fsSL "https://github.com/$REPO/archive/refs/heads/main.tar.gz" -o "$TMP/src.tar.gz"; then
-  echo "[ERROR] download failed. Check network or proxy settings." >&2
+
+# github.com (web) is unreachable on some networks while codeload / raw still work.
+URLS=(
+  "https://codeload.github.com/$REPO/tar.gz/refs/heads/main"
+  "https://github.com/$REPO/archive/refs/heads/main.tar.gz"
+)
+OK=0
+for U in "${URLS[@]}"; do
+  echo "downloading $U"
+  if curl -fsSL --connect-timeout 20 --max-time 180 "$U" -o "$TMP/src.tar.gz"; then
+    OK=1
+    break
+  fi
+  echo "  failed, trying next endpoint"
+done
+if [ "$OK" -ne 1 ]; then
+  echo "[ERROR] download failed on all endpoints. Check network or proxy settings." >&2
+  echo "Manual: curl -fL https://codeload.github.com/$REPO/tar.gz/refs/heads/main -o src.tar.gz" >&2
   exit 1
 fi
 tar -xzf "$TMP/src.tar.gz" -C "$TMP"

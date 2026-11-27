@@ -7,7 +7,12 @@ $ErrorActionPreference = "Stop"
 $Repo = "o0OAdonisO0o/automail-desk"
 $Dest = Join-Path $env:USERPROFILE "AutomailDesk"
 $Zip  = Join-Path $env:TEMP "automail-desk.zip"
-$Url  = "https://github.com/$Repo/archive/refs/heads/main.zip"
+# github.com (web) is unreachable on some networks while codeload / raw still work,
+# so try the CDN endpoint first and fall back to the web endpoint.
+$Urls = @(
+    "https://codeload.github.com/$Repo/zip/refs/heads/main",
+    "https://github.com/$Repo/archive/refs/heads/main.zip"
+)
 
 Write-Host "== Automail Desk installer ==" -ForegroundColor Cyan
 Write-Host "target: $Dest"
@@ -28,11 +33,20 @@ if (-not $py) {
 Write-Host "python : $py"
 
 # 2. download and extract
-Write-Host "downloading $Url"
-try {
-    Invoke-WebRequest -Uri $Url -OutFile $Zip -UseBasicParsing
-} catch {
-    Write-Host "[ERROR] download failed. Check network or proxy settings." -ForegroundColor Red
+$got = $false
+foreach ($u in $Urls) {
+    Write-Host "downloading $u"
+    try {
+        Invoke-WebRequest -Uri $u -OutFile $Zip -UseBasicParsing -TimeoutSec 180
+        $got = $true
+        break
+    } catch {
+        Write-Host "  failed: $($_.Exception.Message)" -ForegroundColor DarkYellow
+    }
+}
+if (-not $got) {
+    Write-Host "[ERROR] download failed on all endpoints. Check network or proxy settings." -ForegroundColor Red
+    Write-Host "Manual: open https://codeload.github.com/$Repo/zip/refs/heads/main and unzip by hand."
     exit 1
 }
 if (Test-Path $Dest) { Remove-Item $Dest -Recurse -Force }

@@ -30,3 +30,6 @@ tools/make_shortcut.py
 tools/make_shortcut2.py
 tools/try_variants.py
 tools/try_variants2.py
+
+# 打包产物
+_release_*.zip
