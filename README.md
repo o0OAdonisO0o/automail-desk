@@ -62,6 +62,16 @@ cp config.example.json config.json # 填写域名、密码与服务商参数
 python server.py                   # Windows 亦可双击 start.bat
 ```
 
+### 方式四：直接下载压缩包（无需 git）
+
+| 用途 | 地址 |
+|---|---|
+| 源码包（CDN 直链，网络受限时优先用这条） | <https://codeload.github.com/o0OAdonisO0o/automail-desk/zip/refs/heads/main> |
+| 版本发布页 | <https://github.com/o0OAdonisO0o/automail-desk/releases> |
+| 固定版本压缩包 | <https://github.com/o0OAdonisO0o/automail-desk/releases/download/v1.0.0/automail-desk-1.0.0.zip> |
+
+部分网络环境下 `github.com` 网页域名不可达，而 `codeload.github.com`、`raw.githubusercontent.com`、`api.github.com` 仍可正常访问，此时请使用上表第一行或通过代理访问。两个安装脚本已内置端点回退：优先请求 `codeload`，失败后再尝试 `github.com`。
+
 面板地址固定为 <http://127.0.0.1:8765>，服务仅监听回环地址，不对局域网开放。
 
 ### 启动与停止
